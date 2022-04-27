@@ -1,4 +1,4 @@
-package com.duogglong.tm.listener;
+package com.duogglong.tm.core.listener;
 
 import com.duogglong.tm.dto.RoleDto;
 import com.duogglong.tm.dto.UserDto;
@@ -11,22 +11,24 @@ import com.duogglong.tm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ApplicationStartupListener implements ApplicationListener<ApplicationReadyEvent> {
-
-    @Autowired
     UserService userService;
-
-    @Autowired
     RoleService roleService;
-
-    @Autowired
     UserRoleService userRoleService;
+    UserRepository userRepository;
 
     @Autowired
-    UserRepository userRepository;
+    public ApplicationStartupListener(UserService userService, RoleService roleService, UserRoleService userRoleService, UserRepository userRepository) {
+        this.userService = userService;
+        this.roleService = roleService;
+        this.userRoleService = userRoleService;
+        this.userRepository = userRepository;
+    }
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
@@ -39,4 +41,10 @@ public class ApplicationStartupListener implements ApplicationListener<Applicati
             userRoleService.saveUserRole(new UserRoleDto(role, user));
         }
     }
+
+    @Bean
+    public static BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
 }

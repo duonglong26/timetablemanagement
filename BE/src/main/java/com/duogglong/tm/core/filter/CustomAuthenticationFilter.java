@@ -1,4 +1,4 @@
-package com.duogglong.tm.filter;
+package com.duogglong.tm.core.filter;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;

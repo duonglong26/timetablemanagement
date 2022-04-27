@@ -9,5 +9,5 @@ public interface UserService {
     List<UserDto> getUsers();
     UserDto getUserById(long userId);
     UserDto getUserByUsername(String username);
-    boolean checkExitsAccount(String username);
+    Boolean checkExitsAccount(String username);
 }

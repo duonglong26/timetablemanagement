@@ -1,4 +1,4 @@
-package com.duogglong.tm.config;
+package com.duogglong.tm.core.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

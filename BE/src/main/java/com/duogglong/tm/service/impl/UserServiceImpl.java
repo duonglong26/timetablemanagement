@@ -9,6 +9,7 @@ import com.duogglong.tm.repository.UserRoleRepository;
 import com.duogglong.tm.service.UserRoleService;
 import com.duogglong.tm.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,23 +19,25 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
-import static com.duogglong.tm.config.PasswordConfig.passwordEncoder;
+import static com.duogglong.tm.core.listener.ApplicationStartupListener.passwordEncoder;
 
 @Service
 @Transactional
 @Slf4j
 public class UserServiceImpl implements UserService, UserDetailsService {
 
-    @Autowired
     UserRepository userRepository;
-    @Autowired
     UserRoleRepository userRoleRepository;
+    UserRoleService userRoleService;
+
     @Autowired
-    static UserRoleService userRoleService;
+    public UserServiceImpl(UserRepository userRepository, UserRoleRepository userRoleRepository, UserRoleService userRoleService) {
+        this.userRepository = userRepository;
+        this.userRoleRepository = userRoleRepository;
+        this.userRoleService = userRoleService;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -46,9 +49,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         } else {
             log.info("User found in the database: {}", username);
             List<Role> roleList = userRoleRepository.findByUserId(user.getId());
-            roleList.forEach(role -> {
-                authorities.add(new SimpleGrantedAuthority(role.getName()));
-            });
+            roleList.forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getName())));
         }
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authorities);
     }
@@ -56,7 +57,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public UserDto saveOrUpdate(UserDto dto) {
         if (dto != null) {
-            User user = userRepository.findById(dto.getId()).orElse(null);
+            User user = userRepository.findByUsername(dto.getUsername());
             if (user == null) {
                 user = new User();
             }
@@ -67,29 +68,32 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 //            Save userRole
             if (!CollectionUtils.isEmpty(dto.getRoleList())) {
-                user.setUserRoleList(new ArrayList<>());
+                user.setUserRoleList(new LinkedList<>());
                 for (RoleDto role : dto.getRoleList()) {
                     user.getUserRoleList().add(userRoleService.saveUserRole(user.getId(), role.getId()));
                 }
             }
             return new UserDto(user);
         }
-        return null;
+        throw new NoSuchFieldError("No blank piece found!");
     }
 
     @Override
     public List<UserDto> getUsers() {
         List<User> listUser = userRepository.findAll();
         List<UserDto> result = new ArrayList<>();
-        listUser.forEach(user -> {
-            result.add(new UserDto(user));
-        });
+        listUser.forEach(user -> result.add(new UserDto(user)));
         return result;
     }
 
     @Override
     public UserDto getUserById(long userId) {
-        return new UserDto(userRepository.findById(userId).orElse(null));
+        User user = userRepository.findById(userId).orElse(null);
+        if (Objects.isNull(user)) {
+            throw new ObjectNotFoundException(UserServiceImpl.class,
+                    "Not found user with id " + userId + " in database.");
+        }
+        return new UserDto(user);
     }
 
     @Override
@@ -98,11 +102,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public boolean checkExitsAccount(String username) {
-        if (userRepository.findByUsername(username) != null) {
-            return true;
-        }
-        return false;
+    public Boolean checkExitsAccount(String username) {
+        return userRepository.findByUsername(username) != null;
     }
 
 }

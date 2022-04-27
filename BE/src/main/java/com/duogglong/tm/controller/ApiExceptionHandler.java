@@ -16,8 +16,7 @@ public class ApiExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<SampleResponse<String>> handleAllException(Exception ex, WebRequest request) {
-        // quá trình kiểm soat lỗi diễn ra ở đây
-        return new ResponseEntity<>(new SampleResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getClass().getSimpleName(), null), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new SampleResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getClass().getSimpleName(), null), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     /**
@@ -25,7 +24,7 @@ public class ApiExceptionHandler {
      */
     @ExceptionHandler(IndexOutOfBoundsException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public ResponseEntity<SampleResponse<String>> TodoException(Exception ex, WebRequest request) {
-        return new ResponseEntity<>(new SampleResponse<>(HttpStatus.BAD_REQUEST.value(), "Object does not exits", null), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<SampleResponse<String>> todoException(Exception ex, WebRequest request) {
+        return new ResponseEntity<>(new SampleResponse<>(HttpStatus.BAD_REQUEST.value(), ex.getClass().getSimpleName(), null), HttpStatus.BAD_REQUEST);
     }
 }

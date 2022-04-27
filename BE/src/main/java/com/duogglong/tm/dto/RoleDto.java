@@ -9,6 +9,9 @@ import lombok.Setter;
 public class RoleDto extends BaseObjectDto {
     private String name;
 
+    public RoleDto() {
+    }
+
     public RoleDto(String name) {
         this.name = name;
     }
