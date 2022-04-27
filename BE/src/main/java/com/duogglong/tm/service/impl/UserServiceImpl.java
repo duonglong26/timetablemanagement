@@ -14,7 +14,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -23,8 +22,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import static com.duogglong.tm.config.PasswordConfig.passwordEncoder;
+
 @Service
-//@RequiredArgsConstructor
 @Transactional
 @Slf4j
 public class UserServiceImpl implements UserService, UserDetailsService {
@@ -35,8 +35,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     UserRoleRepository userRoleRepository;
     @Autowired
     static UserRoleService userRoleService;
-    @Autowired
-    static PasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -63,7 +61,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 user = new User();
             }
             user.setUsername(dto.getUsername());
-            user.setPassword(passwordEncoder.encode(dto.getPassword()));
+            user.setPassword(passwordEncoder().encode(dto.getPassword()));
             log.info("Saving new user {} to the database", dto.getUsername());
             user = userRepository.save(user);
 
@@ -108,24 +106,3 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
 }
-
-//import org.springframework.security.core.userdetails.User;
-//import org.springframework.security.core.userdetails.UserDetails;
-//import org.springframework.security.core.userdetails.UserDetailsService;
-//import org.springframework.security.core.userdetails.UsernameNotFoundException;
-//import org.springframework.stereotype.Service;
-//
-//import java.util.ArrayList;
-//
-//@Service
-//public class UserService implements UserDetailsService {
-//
-//    @Override
-//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//        if("user".equals(username)) {
-//            return new User(username, "$2a$10$Z09r497QS9e3ERuEzq6JguYc9BwFihJzVT7CWDv6v/u07RA7jLJcG", new ArrayList<>());
-//        } else {
-//            throw new UsernameNotFoundException("User not found with username: " + username);
-//        }
-//    }
-//}

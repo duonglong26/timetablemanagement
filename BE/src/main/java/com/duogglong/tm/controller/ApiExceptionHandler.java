@@ -17,7 +17,7 @@ public class ApiExceptionHandler {
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<SampleResponse<String>> handleAllException(Exception ex, WebRequest request) {
         // quá trình kiểm soat lỗi diễn ra ở đây
-        return new ResponseEntity<>(new SampleResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getLocalizedMessage(), null), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new SampleResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getClass().getSimpleName(), null), HttpStatus.BAD_REQUEST);
     }
 
     /**

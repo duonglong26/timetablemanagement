@@ -1,38 +1,12 @@
 package com.duogglong.tm.controller;
 
-import org.springframework.http.HttpStatus;
+import com.duogglong.tm.dto.SampleResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
 
-import java.util.List;
-import java.util.UUID;
-
-//@RestController
-public class ApiController<T> {
-
-    @PostMapping
-    public ResponseEntity<T> create() {
-        return new ResponseEntity<T>(HttpStatus.OK);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<T> getById(@PathVariable("id") UUID id) {
-        return new ResponseEntity<T>(HttpStatus.OK);
-    }
-
-    @GetMapping
-    public ResponseEntity<List<T>> getAll() {
-        return new ResponseEntity<List<T>>(HttpStatus.OK);
-    }
-
-    @PutMapping
-    public ResponseEntity<T> update() {
-        return new ResponseEntity<T>(HttpStatus.OK);
-    }
-
-    @DeleteMapping
-    public ResponseEntity<Boolean> delete() {
-        return new ResponseEntity<Boolean>(HttpStatus.OK);
-    }
-
+public interface ApiController<T> {
+    ResponseEntity<SampleResponse<T>> create(T dto);
+    ResponseEntity<SampleResponse<T>> update(T dto);
+    ResponseEntity<SampleResponse<T>> getById(@PathVariable("id") String id);
+    ResponseEntity<SampleResponse<Boolean>> delete(@PathVariable("id") String id);
 }

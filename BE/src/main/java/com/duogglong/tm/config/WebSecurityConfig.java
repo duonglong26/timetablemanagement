@@ -5,21 +5,16 @@ import com.duogglong.tm.filter.CustomAuthorizationFilter;
 import com.duogglong.tm.service.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import static org.springframework.http.HttpMethod.*;
 
 @Configuration
 @EnableWebSecurity
@@ -27,7 +22,6 @@ import static org.springframework.http.HttpMethod.*;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserServiceImpl userService;
-//    private final ObjectMapper objectMapper;
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -41,9 +35,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable() // disable CSRF
                 .authorizeRequests()
-                .antMatchers("/login").permitAll()
-                .antMatchers(GET, "/api/**").permitAll()
-                .antMatchers(POST, "/api/user/**").hasAnyAuthority("ROLE_ADMIN")
+                .antMatchers("/login", "/api/token/refresh/**", "/logout").permitAll()
+                .antMatchers( "/api/user/**").hasAuthority("ROLE_ADMIN")
+//                .antMatchers(GET, "/api/**").permitAll()
                 .anyRequest().authenticated() // all request requires a logged in user
 
                 .and()
@@ -52,16 +46,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.addFilter(customAuthenticationFilter);
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
-    }
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
-
-    @Bean
-    public AuthenticationFailureHandler authenticationFailureHandler() {
-        return new CustomAuthenticationFailureHandler();
     }
 }

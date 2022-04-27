@@ -12,7 +12,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -20,7 +19,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -71,20 +69,5 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
                 response.getOutputStream(),
                 new SampleResponse<>(HttpStatus.OK.value(), "Login success", tokens));
     }
-
-//    @Override
-//    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-//        response.setStatus(HttpStatus.UNAUTHORIZED.value());
-//        Map<String, Object> data = new HashMap<>();
-//        data.put(
-//                "timestamp",
-//                Calendar.getInstance().getTime());
-//        data.put(
-//                "exception",
-//                exception.getMessage());
-//
-//        response.getOutputStream()
-//                .println(new ObjectMapper().writeValueAsString(data));
-//    }
 
 }
