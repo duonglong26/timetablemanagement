@@ -1,10 +1,10 @@
 package com.duogglong.tm.entity;
 
+import com.duogglong.tm.core.entity.BaseObject;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.LinkedList;
 import java.util.List;
 
 @Entity

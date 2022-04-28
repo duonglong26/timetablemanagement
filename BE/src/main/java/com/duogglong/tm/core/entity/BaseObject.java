@@ -1,6 +1,5 @@
-package com.duogglong.tm.entity;
+package com.duogglong.tm.core.entity;
 
-import com.duogglong.tm.core.auditing.AuditableEntity;
 import lombok.Getter;
 import lombok.Setter;
 

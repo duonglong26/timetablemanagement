@@ -1,5 +1,6 @@
 package com.duogglong.tm.dto;
 
+import com.duogglong.tm.core.dto.BaseObjectDto;
 import com.duogglong.tm.entity.User;
 import lombok.Getter;
 import lombok.Setter;

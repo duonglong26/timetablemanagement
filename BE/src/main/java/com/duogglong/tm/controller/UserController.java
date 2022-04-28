@@ -1,6 +1,6 @@
 package com.duogglong.tm.controller;
 
-import com.duogglong.tm.dto.SampleResponse;
+import com.duogglong.tm.core.entity.SampleResponse;
 import com.duogglong.tm.dto.UserDto;
 import com.duogglong.tm.service.UserService;
 import com.duogglong.tm.utils.ServerConst;
@@ -32,7 +32,7 @@ public class UserController implements ApiController<UserDto> {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<SampleResponse<Boolean>> delete(@PathVariable("id") String id) {
-        return null;
+        return new ResponseEntity<>(new SampleResponse<>(HttpStatus.OK.value(), ServerConst.SUCCESS, service.deleteById(Long.parseLong(id))), HttpStatus.OK);
     }
 
     @GetMapping("/is-exist/{username}")

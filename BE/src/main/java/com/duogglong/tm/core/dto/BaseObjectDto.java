@@ -1,6 +1,5 @@
-package com.duogglong.tm.dto;
+package com.duogglong.tm.core.dto;
 
-import com.duogglong.tm.core.auditing.AuditableEntityDto;
 import lombok.Getter;
 import lombok.Setter;
 

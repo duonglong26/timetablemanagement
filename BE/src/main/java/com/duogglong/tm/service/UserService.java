@@ -10,4 +10,5 @@ public interface UserService {
     UserDto getUserById(long userId);
     UserDto getUserByUsername(String username);
     Boolean checkExitsAccount(String username);
+    Boolean deleteById(long id);
 }

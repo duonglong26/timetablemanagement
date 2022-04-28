@@ -1,7 +1,6 @@
 package com.duogglong.tm.controller;
 
-import com.duogglong.tm.dto.SampleResponse;
-import com.duogglong.tm.entity.Role;
+import com.duogglong.tm.core.entity.SampleResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

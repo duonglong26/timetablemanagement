@@ -2,6 +2,7 @@ package com.duogglong.tm.core.config;
 
 import com.duogglong.tm.core.filter.CustomAuthenticationFilter;
 import com.duogglong.tm.core.filter.CustomAuthorizationFilter;
+import com.duogglong.tm.core.rest.RestAuthenticationEntryPoint;
 import com.duogglong.tm.service.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,13 +37,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable() // disable CSRF
                 .authorizeRequests()
                 .antMatchers("/login", "/api/token/refresh/**", "/logout").permitAll()
-                .antMatchers( "/api/user/**").hasAuthority("ROLE_ADMIN")
+                .antMatchers("/api/user/**").hasAuthority("ROLE_ADMIN")
                 .antMatchers(GET, "/api/**").permitAll()
-                .anyRequest().authenticated(); // all request requires a logged in user
+                .anyRequest().authenticated() // all request requires a logged in user
 
-//                .and()
-//                .exceptionHandling() //default response if the client wants to get a resource unauthorized
-//                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(new RestAuthenticationEntryPoint());
 
         http.addFilter(customAuthenticationFilter);
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);

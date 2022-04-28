@@ -1,4 +1,4 @@
-package com.duogglong.tm.core.auditing;
+package com.duogglong.tm.core.entity;
 
 import lombok.Getter;
 import lombok.Setter;

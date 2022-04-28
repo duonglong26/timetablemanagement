@@ -106,4 +106,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userRepository.findByUsername(username) != null;
     }
 
+    @Override
+    public Boolean deleteById(long id) {
+        if (userRepository.existsById(id)) {
+            userRoleRepository.deleteByIdUser(id);
+            userRepository.deleteById(id);
+            return true;
+        }
+        throw new ObjectNotFoundException(UserServiceImpl.class, "Not found user in database.");
+    }
+
 }

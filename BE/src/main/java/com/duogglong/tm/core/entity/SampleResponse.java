@@ -1,4 +1,4 @@
-package com.duogglong.tm.dto;
+package com.duogglong.tm.core.entity;
 
 import lombok.Getter;
 import lombok.Setter;
