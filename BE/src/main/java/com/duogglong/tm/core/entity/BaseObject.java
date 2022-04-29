@@ -15,7 +15,7 @@ public class BaseObject extends AuditableEntity {
     @Column(
             name = "active"
     )
-    private Boolean active;
+    private Boolean active = true;
 
     public BaseObject() {
     }

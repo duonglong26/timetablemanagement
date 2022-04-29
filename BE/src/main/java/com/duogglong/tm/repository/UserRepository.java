@@ -7,9 +7,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    @Query("select e from User e where e.username = ?1")
+    @Query("select e from User e where e.username = ?1 and e.active = true ")
     User findByUsername(String username);
 
-    @Query("delete from User e where e.username = ?1")
+    @Query("delete from User e where e.username = ?1 and e.active = true ")
     void deleteByUsername(String username);
 }

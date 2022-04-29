@@ -2,12 +2,11 @@ package com.duogglong.tm.controller;
 
 import com.duogglong.tm.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.provider.endpoint.FrameworkEndpoint;
-import org.springframework.security.oauth2.provider.token.ConsumerTokenServices;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -29,8 +28,7 @@ public class TokenController {
         tokenService.refreshToken(request, response);
     }
 
-    @DeleteMapping("/revoke")
-    public void revokeToken(HttpServletRequest request) {
-        tokenService.revokeToken(request);
-    }
+//    @DeleteMapping("/revoke")
+//    public void revokeToken(HttpServletRequest request) {
+//    }
 }
